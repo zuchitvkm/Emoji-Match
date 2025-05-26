@@ -56,9 +56,10 @@ function setupGrid() {
   grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
   grid.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
   for (let i = 0; i < cards.length; i++) {
-    const card = document.createElement('div');
+    const card = document.createElement('button');
     card.className = 'card';
     card.dataset.id = i;
+    card.type = 'button'; // Ensure it behaves as a button
     card.innerHTML = `<span class="emoji">${cards[i].emoji}</span>`;
     card.addEventListener('click', onCardClick);
     grid.appendChild(card);
