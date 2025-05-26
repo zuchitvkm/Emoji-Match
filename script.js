@@ -91,7 +91,7 @@ function onCardClick(e) {
         document.querySelector(`[data-id='${id1}']`).classList.remove('flipped');
         document.querySelector(`[data-id='${id2}']`).classList.remove('flipped');
         flipped = [];
-      }, 800);
+      }, FLIP_ANIMATION_DURATION_MS);
     }
   }
 }
