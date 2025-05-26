@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Match Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-container">
+    <header>
+      <h1>Emoji Match</h1>
+      <div class="controls">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy (4x4)</option>
+          <option value="medium">Medium (6x6)</option>
+        </select>
+        <span id="theme"></span>
+      </div>
+      <div class="stats">
+        <span>Moves: <span id="moves">0</span></span>
+        <span>Time: <span id="timer">0:00</span></span>
+      </div>
+    </header>
+    <main>
+      <div id="card-grid" class="card-grid"></div>
+      <div id="win-message" class="win-message hidden">
+        <h2>You Win! 🎉</h2>
+        <button id="restart">Play Again</button>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
