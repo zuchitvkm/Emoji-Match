@@ -1,0 +1,65 @@
+body {
+  font-family: 'Segoe UI Emoji', 'Segoe UI', Arial, sans-serif;
+  background: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+.game-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 24px;
+}
+header {
+  text-align: center;
+}
+.controls {
+  margin: 12px 0;
+}
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 16px;
+}
+.card-grid {
+  display: grid;
+  gap: 12px;
+  justify-content: center;
+}
+.card {
+  width: 64px;
+  height: 64px;
+  background: #e0e7ef;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, transform 0.2s;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.card.flipped, .card.matched {
+  background: #fffbe7;
+  cursor: default;
+  transform: scale(1.05);
+}
+.card .emoji {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.card.flipped .emoji, .card.matched .emoji {
+  opacity: 1;
+}
+.win-message {
+  text-align: center;
+  margin-top: 24px;
+}
+.hidden {
+  display: none;
+}
