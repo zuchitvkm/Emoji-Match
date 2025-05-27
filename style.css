@@ -40,7 +40,7 @@ header {
   font-size: 2rem;
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s, transform 0.2s;
+  transition: background 0.2s, transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
   position: relative;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
@@ -48,6 +48,15 @@ header {
   background: #fffbe7;
   cursor: default;
   transform: scale(1.05);
+}
+.card.flipping {
+  pointer-events: none;
+  transform: rotateY(90deg) scale(1.1);
+  transition: transform 0.25s cubic-bezier(.4,2,.6,1);
+}
+.card.matched, .card.disabled {
+  pointer-events: none;
+  opacity: 0.7;
 }
 .card .emoji {
   opacity: 0;
@@ -62,4 +71,24 @@ header {
 }
 .hidden {
   display: none;
+}
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  z-index: 100;
+  width: 0;
+  height: 0;
+}
+.confetti-emoji {
+  position: absolute;
+  font-size: 2rem;
+  will-change: transform, opacity;
+  animation: confetti-burst 1s ease-out forwards;
+}
+@keyframes confetti-burst {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.8) rotate(720deg); }
 }

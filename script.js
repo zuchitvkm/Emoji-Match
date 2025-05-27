@@ -59,41 +59,87 @@ function setupGrid() {
     const card = document.createElement('button');
     card.className = 'card';
     card.dataset.id = i;
-    card.type = 'button'; // Ensure it behaves as a button
+    card.type = 'button';
     card.innerHTML = `<span class="emoji">${cards[i].emoji}</span>`;
     card.addEventListener('click', onCardClick);
     grid.appendChild(card);
   }
 }
 
+const FLIP_ANIMATION_DURATION_MS = 700;
+let animating = false;
+let matchSound = null;
+
+function playMatchSound() {
+  if (!matchSound) {
+    matchSound = new Audio('https://cdn.jsdelivr.net/gh/saintplay/audio@main/ding.mp3');
+  }
+  matchSound.currentTime = 0;
+  matchSound.play();
+}
+
+function showConfettiBurst(x, y, emoji = '🎉') {
+  const confetti = document.createElement('div');
+  confetti.className = 'confetti';
+  document.body.appendChild(confetti);
+  for (let i = 0; i < 12; i++) {
+    const span = document.createElement('span');
+    span.className = 'confetti-emoji';
+    span.textContent = emoji;
+    const angle = (Math.PI * 2 * i) / 12;
+    const radius = 120 + Math.random() * 40;
+    span.style.setProperty('--x', `${Math.cos(angle) * radius}px`);
+    span.style.setProperty('--y', `${Math.sin(angle) * radius}px`);
+    confetti.appendChild(span);
+  }
+  confetti.style.left = `${x}px`;
+  confetti.style.top = `${y}px`;
+  setTimeout(() => confetti.remove(), 1200);
+}
+
 function onCardClick(e) {
+  if (animating) return;
   if (!gameStarted) startTimer();
   const cardEl = e.currentTarget;
   const id = +cardEl.dataset.id;
   if (flipped.length === 2 || cards[id].matched || flipped.includes(id)) return;
-  cardEl.classList.add('flipped');
-  flipped.push(id);
-  if (flipped.length === 2) {
-    moves++;
-    movesSpan.textContent = moves;
-    const [id1, id2] = flipped;
-    if (cards[id1].emoji === cards[id2].emoji) {
-      cards[id1].matched = cards[id2].matched = true;
-      document.querySelector(`[data-id='${id1}']`).classList.add('matched');
-      document.querySelector(`[data-id='${id2}']`).classList.add('matched');
-      matched.push(id1, id2);
-      flipped = [];
-      if (matched.length === cards.length) {
-        endGame();
-      }
-    } else {
-      setTimeout(() => {
-        document.querySelector(`[data-id='${id1}']`).classList.remove('flipped');
-        document.querySelector(`[data-id='${id2}']`).classList.remove('flipped');
+  cardEl.classList.add('flipping');
+  animating = true;
+  setTimeout(() => {
+    cardEl.classList.remove('flipping');
+    cardEl.classList.add('flipped');
+    flipped.push(id);
+    animating = false;
+    if (flipped.length === 2) {
+      moves++;
+      movesSpan.textContent = moves;
+      const [id1, id2] = flipped;
+      if (cards[id1].emoji === cards[id2].emoji) {
+        cards[id1].matched = cards[id2].matched = true;
+        document.querySelector(`[data-id='${id1}']`).classList.add('matched');
+        document.querySelector(`[data-id='${id2}']`).classList.add('matched');
+        matched.push(id1, id2);
+        // Celebration effect
+        const rect1 = document.querySelector(`[data-id='${id1}']`).getBoundingClientRect();
+        const rect2 = document.querySelector(`[data-id='${id2}']`).getBoundingClientRect();
+        showConfettiBurst((rect1.left+rect1.right)/2, (rect1.top+rect1.bottom)/2, cards[id1].emoji);
+        showConfettiBurst((rect2.left+rect2.right)/2, (rect2.top+rect2.bottom)/2, cards[id2].emoji);
+        playMatchSound();
         flipped = [];
-      }, FLIP_ANIMATION_DURATION_MS);
+        if (matched.length === cards.length) {
+          setTimeout(endGame, 800);
+        }
+      } else {
+        animating = true;
+        setTimeout(() => {
+          document.querySelector(`[data-id='${id1}']`).classList.remove('flipped');
+          document.querySelector(`[data-id='${id2}']`).classList.remove('flipped');
+          flipped = [];
+          animating = false;
+        }, FLIP_ANIMATION_DURATION_MS);
+      }
     }
-  }
+  }, 180);
 }
 
 function startTimer() {
@@ -111,6 +157,10 @@ function startTimer() {
 function endGame() {
   clearInterval(timerInterval);
   winMessage.classList.remove('hidden');
+  // Celebration for win
+  const gridRect = grid.getBoundingClientRect();
+  showConfettiBurst((gridRect.left+gridRect.right)/2, gridRect.top+40, '🎉');
+  playMatchSound();
   gameStarted = false;
 }
 
