@@ -172,3 +172,6 @@ header h1 {
   80% { opacity: 1; }
   100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.8) rotate(720deg); }
 }
+.hidden {
+  display: none;
+}
