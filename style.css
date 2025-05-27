@@ -1,6 +1,10 @@
 body {
   font-family: 'Segoe UI Emoji', 'Segoe UI', Arial, sans-serif;
-  background: #f0f4f8;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e0e7ef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
   padding: 0;
 }
@@ -8,44 +12,87 @@ body {
   max-width: 600px;
   margin: 40px auto;
   background: #fff;
+  border: 2px solid #e0e7ef;
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  padding: 32px 24px 40px 24px;
+  position: relative;
+  overflow: visible;
 }
 header {
   text-align: center;
 }
+header h1 {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  color: #ffb300;
+  text-shadow: 0 2px 8px #fffbe7, 0 1px 0 #e0e7ef;
+  margin-bottom: 8px;
+}
 .controls {
   margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 1.1rem;
+}
+#difficulty {
+  border-radius: 6px;
+  border: 1px solid #e0e7ef;
+  padding: 4px 10px;
+  font-size: 1rem;
+  background: #fffbe7;
+  color: #ffb300;
+  font-weight: bold;
+  outline: none;
+  transition: border 0.2s;
+}
+#difficulty:focus {
+  border: 1.5px solid #ffb300;
 }
 .stats {
   display: flex;
   justify-content: center;
   gap: 32px;
   margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: #888;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 8px 0;
 }
 .card-grid {
   display: grid;
   gap: 12px;
   justify-content: center;
+  margin: 0 auto;
+  padding: 12px 0 0 0;
 }
 .card {
   width: 64px;
   height: 64px;
-  background: #e0e7ef;
+  background: linear-gradient(135deg, #e0e7ef 60%, #fffbe7 100%);
+  border: 2px solid #ffecb3;
   border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(255,179,0,0.08);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.2rem;
   cursor: pointer;
   user-select: none;
-  transition: background 0.2s, transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
-  position: relative;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: background 0.2s, transform 0.4s cubic-bezier(.4,2,.6,1), box-shadow 0.2s, border 0.2s;
+  outline: none;
+}
+.card:focus {
+  border: 2.5px solid #ffb300;
+  box-shadow: 0 0 0 3px #ffe08255;
 }
 .card.flipped, .card.matched {
-  background: #fffbe7;
+  background: linear-gradient(135deg, #fffbe7 60%, #ffe082 100%);
+  border: 2.5px solid #ffb300;
+  box-shadow: 0 4px 16px rgba(255,179,0,0.12);
   cursor: default;
   transform: scale(1.05);
 }
@@ -53,24 +100,56 @@ header {
   pointer-events: none;
   transform: rotateY(90deg) scale(1.1);
   transition: transform 0.25s cubic-bezier(.4,2,.6,1);
+  z-index: 2;
 }
 .card.matched, .card.disabled {
   pointer-events: none;
   opacity: 0.7;
+  filter: grayscale(0.2) brightness(1.1);
 }
 .card .emoji {
   opacity: 0;
   transition: opacity 0.2s;
+  font-size: 2.2rem;
+  filter: drop-shadow(0 2px 4px #ffe08288);
 }
 .card.flipped .emoji, .card.matched .emoji {
   opacity: 1;
+  animation: pop-emoji 0.3s cubic-bezier(.4,2,.6,1);
+}
+@keyframes pop-emoji {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
 }
 .win-message {
   text-align: center;
   margin-top: 24px;
+  background: #fffbe7;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #ffe08244;
+  padding: 18px 0 10px 0;
+  color: #ffb300;
+  font-size: 1.5rem;
+  font-weight: bold;
+  animation: pop-emoji 0.7s cubic-bezier(.4,2,.6,1);
 }
-.hidden {
-  display: none;
+#restart {
+  margin-top: 12px;
+  background: linear-gradient(90deg, #ffb300 60%, #ffe082 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #ffe08244;
+  transition: background 0.2s, transform 0.2s;
+}
+#restart:hover {
+  background: linear-gradient(90deg, #ffe082 60%, #ffb300 100%);
+  transform: scale(1.07);
 }
 .confetti {
   position: absolute;
@@ -83,9 +162,10 @@ header {
 }
 .confetti-emoji {
   position: absolute;
-  font-size: 2rem;
+  font-size: 2.3rem;
   will-change: transform, opacity;
   animation: confetti-burst 1s ease-out forwards;
+  filter: drop-shadow(0 2px 4px #ffe08288);
 }
 @keyframes confetti-burst {
   0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
