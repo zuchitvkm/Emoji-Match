@@ -48,7 +48,7 @@ function setupGrid() {
   flipped = [];
   moves = 0;
   movesSpan.textContent = moves;
-  winMessage.classList.add('hidden');
+  winMessage.classList.add('hidden'); // Ensure win message is hidden at game start
   pickTheme();
   const numPairs = (gridSize * gridSize) / 2;
   let emojis = shuffle(theme.slice(0, numPairs).concat(theme.slice(0, numPairs)));
@@ -156,7 +156,7 @@ function startTimer() {
 
 function endGame() {
   clearInterval(timerInterval);
-  winMessage.classList.remove('hidden');
+  winMessage.classList.remove('hidden'); // Show win message only when game is won
   // Celebration for win
   const gridRect = grid.getBoundingClientRect();
   showConfettiBurst((gridRect.left+gridRect.right)/2, gridRect.top+40, '🎉');
@@ -169,6 +169,7 @@ function restartGame() {
   timer = 0;
   timerSpan.textContent = '0:00';
   gameStarted = false;
+  winMessage.classList.add('hidden'); // Hide win message on restart
   setupGrid();
 }
 
